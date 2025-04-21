@@ -239,7 +239,7 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       if (textController.text == "Swipe Machine") {
-                        Get.to(() => SwipeMachineScreen(
+                        Get.to(() =>  SwipeMachineScreen(
                           result: _textController.text,
                           selectedOption: textController.text,
                         ));

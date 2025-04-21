@@ -146,7 +146,6 @@ class _QrResultScreenState extends State<QrResultScreen> {
                             );
                           }
                         },
-
                         icon: const Icon(Icons.check, size: 38),
                       ),
                     ),

@@ -16,12 +16,14 @@ class UploadController extends GetxController {
   var uploadingImages = <File>{}.obs;
   final box = GetStorage();
 
-  Future<void> pickImageFromCamera() async {
+  Future<String?> pickImageFromCamera() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       selectedImages.add(File(image.path));
+      return image.path;
     }
+    return null;
   }
 
   Future<void> pickImageFromGallery() async {
