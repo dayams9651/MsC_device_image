@@ -32,11 +32,11 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
   // String selectedOption = "Missing Device Utility";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    _textController.clear();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _textController.clear();
+  // }
 
   void _toggleFlash() async {
     if (_qrViewController != null) {

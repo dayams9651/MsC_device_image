@@ -187,6 +187,7 @@ class UploadController extends GetxController {
       isLoading.value = false;
     }
   }
+
   void removeImage(File image) {
     selectedImages.remove(image);
   }

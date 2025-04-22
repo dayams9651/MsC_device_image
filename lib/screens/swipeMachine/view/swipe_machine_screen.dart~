@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:msc_device_image/common/widget/const_shimmer_effects.dart';
 import 'package:msc_device_image/screens/controller/camera_controller.dart';
 import 'package:msc_device_image/screens/swipeMachine/controller/swipe_machine_controller.dart';
 import 'package:msc_device_image/screens/swipeMachine/controller/swipe_machine_uploadImage.dart';
 import 'package:msc_device_image/style/color.dart';
 import 'package:msc_device_image/style/text_style.dart';
-import 'package:shimmer/shimmer.dart';
 class SwipeMachineScreen extends StatefulWidget {
   final String result;
   final String selectedOption;
@@ -61,7 +59,7 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Shimmer.fromColors(baseColor: baseColor, highlightColor: highLightColor, child: loadSke());
+          return const Center(child: CircularProgressIndicator());
         }
 
         final options = controller.imageOptions;

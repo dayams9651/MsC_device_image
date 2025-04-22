@@ -126,7 +126,6 @@ class _QrResultScreenState extends State<QrResultScreen> {
                         icon: const Icon(Icons.qr_code_scanner_outlined, size: 38),
                       ),
                     ),
-
                     CircleAvatar(
                       radius: 30,
                       child: IconButton(

@@ -18,7 +18,7 @@ class SwipeMachineUploadImage extends GetxController {
   Future<void> swipeImageImage(String filePath, {required String imageId}) async {
     String? token = box.read('token');
     if (token == null || token.isEmpty) {
-      Get.snackbar('Error', 'Token not found. Please log in first.', backgroundColor: AppColors.error20);
+      Get.snackbar('Error', 'Token not found. Please log in first.');
       return;
     }
 
