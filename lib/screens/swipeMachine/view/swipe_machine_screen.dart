@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:msc_device_image/common/widget/const_shimmer_effects.dart';
@@ -28,7 +26,6 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
   final ImageOptionController controller = Get.put(ImageOptionController());
   final UploadController uploadController = Get.put(UploadController());
   final SwipeMachineUploadImage swipeImageController = Get.put(SwipeMachineUploadImage());
-
   late List<bool> checkBoxStates;
   late List<String?> imagePaths;
   late List<bool> isUploading;
@@ -37,6 +34,7 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final length = controller.imageOptions.length;
       setState(() {
@@ -74,7 +72,6 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
           isUploading = List<bool>.filled(options.length, false);
           isUploaded = List<bool>.filled(options.length, false);
         }
-
         return Column(
           children: [
             Expanded(
@@ -127,11 +124,7 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
                                   child: Center(
                                     child: Text(
                                       imagePaths[index] ?? option.imgName,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: checkBoxStates[index] ? AppColors.white60 : Colors.grey,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: TextStyle(fontSize: 16, color:  checkBoxStates[index] ? AppColors.white60 : Colors.grey, fontWeight: FontWeight.bold),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -187,52 +180,6 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
                 },
               ),
             ),
-
-            if (imagePaths.any((path) => path != null))
-              Container(
-                height: 100,
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: imagePaths.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 10),
-                  itemBuilder: (context, index) {
-                    final path = imagePaths[index];
-                    if (path == null) return const SizedBox.shrink();
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Stack(
-                        children: [
-                          Image.file(
-                            File(path),
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                            bottom: 5,
-                            left: 2,
-                            child: Container(
-                              color: Colors.black54,
-                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                              child: Text(
-                                'MS Corpres Automation', // Example text
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-            // Submit Button
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Obx(() {

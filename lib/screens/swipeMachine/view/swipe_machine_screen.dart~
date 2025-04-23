@@ -211,7 +211,7 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
                           ),
                           Positioned(
                             bottom: 5,
-                            left: 5,
+                            left: 2,
                             child: Container(
                               color: Colors.black54,
                               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),

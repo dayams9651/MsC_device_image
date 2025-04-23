@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -13,15 +14,30 @@ import '../scanQR_screen_page.dart';
 class UploadController extends GetxController {
   var isLoading = false.obs;
   var selectedImages = RxList<File>();
+  // List<File> selectedImages = [];
   var uploadingImages = <File>{}.obs;
   final box = GetStorage();
 
   Future<String?> pickImageFromCamera() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
     if (image != null) {
-      selectedImages.add(File(image.path));
-      return image.path;
+      final compressedData = await FlutterImageCompress.compressWithFile(
+        image.path,
+        quality: 95,
+      );
+      if (compressedData != null) {
+        final compressedFile = File(image.path)..writeAsBytesSync(compressedData);
+        final fileSizeInBytes = compressedFile.lengthSync();
+        debugPrint("Captured image size: ${fileSizeInBytes / 1024} KB");
+        if (fileSizeInBytes <= 819200) {
+          selectedImages.add(compressedFile);
+          return compressedFile.path;
+        } else {
+          debugPrint("Image is too large. Max allowed size is 800KB.");
+        }
+      }
     }
     return null;
   }
@@ -35,10 +51,8 @@ class UploadController extends GetxController {
   }
 
   Future<void> uploadImageMDU(String? result) async {
-
     String? token = box.read('token');
     debugPrint('Retrieved Token: $token');
-
     if (token == null || token.isEmpty) {
       Get.snackbar('Error', 'Token not found. Please log in first.', backgroundColor: AppColors.error20);
       return;
