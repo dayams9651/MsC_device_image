@@ -20,10 +20,16 @@ dependencies:
   google_fonts: ^6.2.1
   image_picker: ^1.1.2
   http: ^1.2.2
+
+  image: ^4.5.3
+  path_provider: ^2.1.5
+
+
   get_storage: ^2.1.1
   http_parser: ^4.1.2
   shimmer: ^3.0.0
   loading_animation_widget:
+
 
 
 dev_dependencies:
