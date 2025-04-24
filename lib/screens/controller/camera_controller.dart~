@@ -103,7 +103,6 @@ class UploadController extends GetxController {
     }
   }
 
-
   Future<void> uploadImage(String? result) async {
     if (selectedImages.isEmpty) {
       Get.snackbar('Error', 'Please select at least one image', backgroundColor: AppColors.error20);

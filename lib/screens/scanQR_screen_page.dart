@@ -154,8 +154,8 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                       _qrViewController?.scannedDataStream.listen((scanData) async {
                         if (scanData != null && scanData.code != null) {
                           String scannedCode = scanData.code ?? '';
-                          if (scannedCode.length > 15) {
-                            scannedCode = scannedCode.substring(0, 15);
+                          if (scannedCode.length > 17) {
+                            scannedCode = scannedCode.substring(0, 17);
                           }
                           if (_textController.text != scannedCode) {
                             setState(() {
@@ -179,7 +179,11 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                       child: TextField(
                         controller: _textController,
                         decoration: InputDecoration(
-                          hintText: textController.text == "Missing Device Utility" ? "Enter IMEI Number" : "Enter AWB Number",
+                          hintText: textController.text == "Missing Device Utility"
+                              ? "Enter IMEI Number"
+                              // : textController.text == "Swipe Machine"
+                              // ? "Enter Serial Number"
+                              : "Enter AWB Number",
                           hintStyle: TextStyle(fontWeight: FontWeight.bold),
                           border: OutlineInputBorder(),
                         ),

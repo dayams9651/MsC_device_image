@@ -75,7 +75,6 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
         Uri.parse(logInApi),
         headers: {'authorization': '$token',},
       );
-
       debugPrint("Server response status code: ${response.statusCode}");
       debugPrint("Server response body: ${response.body}");
 
