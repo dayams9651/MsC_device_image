@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +60,7 @@ class SwipeMachineUploadImage extends GetxController {
     }
   }
 
-  Future<void> submitImageList({required String awbNo}) async {
+  Future<void> submitImageList({required String awbNo, required String deviceId}) async {
     String? token = box.read('token');
     if (token == null || token.isEmpty) {
       Get.snackbar('Error', 'Token not found. Please log in first.', backgroundColor: AppColors.error20);
@@ -76,6 +77,7 @@ class SwipeMachineUploadImage extends GetxController {
 
       final body = {
         "awb_no": awbNo,
+        "serial_no": deviceId,
         "imagData": uploadedImageMap.entries.map((entry) {
           return {
             "image_id": entry.key,
@@ -97,10 +99,14 @@ class SwipeMachineUploadImage extends GetxController {
       if (response.statusCode == 200 && res['success']) {
         Get.snackbar("Success", res['message'] ?? "Images submitted.", backgroundColor: AppColors.success40);
         Get.to(const ScanQrScreenPage(setResult: ''));
+        debugPrint("Device Id $deviceId");
+        debugPrint("Awb Number $awbNo");
       } else {
+        debugPrint("Failed: ${res['message']}");
         Get.snackbar("Failed", res['message'] ?? "Submission failed.", backgroundColor: AppColors.error20);
       }
     } catch (e) {
+      debugPrint("Exception: $e");
       Get.snackbar("Error", "Exception during submission: $e", backgroundColor: AppColors.error20);
     } finally {
       isSubmitting.value = false;

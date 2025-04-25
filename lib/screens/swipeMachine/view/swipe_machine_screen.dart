@@ -10,11 +10,14 @@ import 'package:shimmer/shimmer.dart';
 
 class SwipeMachineScreen extends StatefulWidget {
   final String result;
+  final String serialNo;
   final String selectedOption;
+
 
   const SwipeMachineScreen({
     super.key,
     required this.result,
+    required this.serialNo,
     required this.selectedOption,
   });
 
@@ -189,7 +192,7 @@ class _ImageOptionScreenState extends State<SwipeMachineScreen> {
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor),
                     onPressed: swipeImageController.isSubmitting.value
                         ? null
-                        : () => swipeImageController.submitImageList(awbNo: widget.result),
+                        : () => swipeImageController.submitImageList(awbNo: widget.result, deviceId: widget.serialNo),
                     child: swipeImageController.isSubmitting.value
                         ? const SizedBox(
                       width: 20,

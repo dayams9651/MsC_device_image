@@ -5,7 +5,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:msc_device_image/screens/swipeMachine/view/swipe_machine_screen.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import '../common/widget/round_button.dart';
-import '../const/image_strings.dart';
 import '../style/color.dart';
 import '../style/text_style.dart';
 import 'controller/device_details_controller.dart';
@@ -24,30 +23,25 @@ class ScanQrScreenPage extends StatefulWidget {
 class _ProfilePageState extends State<ScanQrScreenPage> {
   final MobileScannerController controller = MobileScannerController();
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _serialTextController = TextEditingController();
   final DeviceController deviceController = Get.put(DeviceController());
-  final List<String> showBottomSheet = ['Missing Device Utility', 'Wrong Device Utility', 'AWB MIN', 'Swipe Machine'];
+  final List<String> showBottomSheet = [
+    'Missing Device Utility',
+    'Wrong Device Utility',
+    'AWB MIN',
+    'Swipe Machine'
+  ];
   final TextEditingController textController = TextEditingController();
   QRViewController? _qrViewController;
   bool isSubmitting = false;
-  // String selectedOption = "Missing Device Utility";
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int scanCount = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _textController.clear();
-  // }
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _toggleFlash() async {
     if (_qrViewController != null) {
       _qrViewController?.toggleFlash();
     }
-  }
-
-  @override
-  void dispose() {
-    _textController.clear();
-    super.dispose();
   }
 
   void _submitText() async {
@@ -62,6 +56,14 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
       });
     }
   }
+
+  @override
+  void dispose() {
+    _textController.clear();
+    _serialTextController.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +73,8 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             "Scan QR/Barcode",
-            style: AppTextStyles.kCaption13SemiBoldTextStyle.copyWith(color: AppColors.white),
+            style: AppTextStyles.kCaption13SemiBoldTextStyle.copyWith(
+                color: AppColors.white),
           ),
         ),
         actions: [
@@ -112,6 +115,9 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                       if (selectedOption != null) {
                         setState(() {
                           textController.text = selectedOption;
+                          scanCount = 0; // Reset scan count when a new option is selected
+                          _textController.clear();
+                          _serialTextController.clear();
                         });
                       }
                     });
@@ -157,11 +163,18 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                           if (scannedCode.length > 17) {
                             scannedCode = scannedCode.substring(0, 17);
                           }
-                          if (_textController.text != scannedCode) {
-                            setState(() {
+                          setState(() {
+                            if (textController.text == "Swipe Machine") {
+                              if (scanCount == 0) {
+                                _textController.text = scannedCode;
+                              } else if (scanCount == 1) {
+                                _serialTextController.text = scannedCode;
+                              }
+                              scanCount++;
+                            } else {
                               _textController.text = scannedCode;
-                            });
-                          }
+                            }
+                          });
                         }
                       });
                     },
@@ -173,69 +186,65 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _textController,
-                        decoration: InputDecoration(
-                          hintText: textController.text == "Missing Device Utility"
-                              ? "Enter IMEI Number"
-                              // : textController.text == "Swipe Machine"
-                              // ? "Enter Serial Number"
-                              : "Enter AWB Number",
-                          hintStyle: TextStyle(fontWeight: FontWeight.bold),
-                          border: OutlineInputBorder(),
-                        ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _textController,
+                                  decoration: InputDecoration(
+                                    hintText: textController.text == "Missing Device Utility"
+                                        ? "Enter IMEI Number"
+                                    // : textController.text == "Swipe Machine"
+                                    // ? "Enter Serial Number"
+                                        : "Enter AWB Number",
+                                    hintStyle: TextStyle(fontWeight: FontWeight.bold),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: textController.text == "Missing Device Utility"
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                ),
+                                child: textController.text == "Missing Device Utility"
+                                    ? TextButton(
+                                  onPressed: isSubmitting ? null : _submitText,
+                                  child: isSubmitting
+                                      ? const CircularProgressIndicator(color: AppColors.white)
+                                      : const Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                    size: 35,
+                                    color: AppColors.white,
+                                  ),
+                                )
+                                    : const SizedBox(),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          if (textController.text == "Swipe Machine")
+                          TextField(
+                            controller: _serialTextController,
+                            decoration: InputDecoration(
+                              hintText: "Enter Serial Number",
+                              hintStyle: TextStyle(fontWeight: FontWeight.bold),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: textController.text == "Missing Device Utility"
-                            ? AppColors.primaryColor
-                            : Colors.transparent,
-                      ),
-                      child: textController.text == "Missing Device Utility"
-                          ? TextButton(
-                        onPressed: isSubmitting ? null : _submitText,
-                        child: isSubmitting
-                            ? const CircularProgressIndicator(color: AppColors.white)
-                            : const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          size: 35,
-                          color: AppColors.white,
-                        ),
-                      )
-                          : const SizedBox(),
-                    ),
                   ],
                 ),
               ),
-              Obx(() {
-                final device = deviceController.deviceDetail.value;
-                if (device != null) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Product Name : ${device.productName}", style: AppTextStyles.kSmall12SemiBoldTextStyle),
-                        Text("Device IMEI: ${device.deviceImei}", style: AppTextStyles.kSmall12SemiBoldTextStyle),
-                        Text("Device Model : ${device.deviceModel}", style: AppTextStyles.kSmall10SemiBoldTextStyle),
-                        Text("Serial Number : ${device.serialNumber}", style: AppTextStyles.kSmall10SemiBoldTextStyle),
-                        Text("Manufacturing Months : ${device.manufacturingMonth}", style: AppTextStyles.kSmall10SemiBoldTextStyle),
-                        Text("Manufacturing Year : ${device.manufacturingYear}", style: AppTextStyles.kSmall10SemiBoldTextStyle),
-                        Text("Manufacturing BY : ${device.manufacturer}", style: AppTextStyles.kSmall10SemiBoldTextStyle),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Image.asset(noData1, height: 250, width: 250);
-                }
-              }),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: RoundButton(
@@ -245,6 +254,7 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                       if (textController.text == "Swipe Machine") {
                         Get.to(() => SwipeMachineScreen(
                           result: _textController.text,
+                          serialNo: _serialTextController.text,
                           selectedOption: textController.text,
                         ));
                       } else {
@@ -268,5 +278,4 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
     );
   }
 }
-
 
