@@ -138,7 +138,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   RoundButton(
                     title: "SIM Module",
                     onTap: () {
-                      Get.toNamed(ApplicationPages.textScannerScreen);
+                      Get.toNamed(ApplicationPages.simModuleScreen);
                     },
                   ),
                   const SizedBox(height: 5),
