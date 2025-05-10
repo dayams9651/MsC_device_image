@@ -164,16 +164,16 @@ class _ProfilePageState extends State<ScanQrScreenPage> {
                             scannedCode = scannedCode.substring(0, 17);
                           }
                           setState(() {
-                            if (textController.text == "Swipe Machine") {
-                              if (scanCount == 0) {
-                                _textController.text = scannedCode;
-                              } else if (scanCount == 1) {
-                                _serialTextController.text = scannedCode;
-                              }
-                              scanCount++;
-                            } else {
+                            // if (textController.text == "Swipe Machine") {
+                            //   if (scanCount == 0) {
+                            //     _textController.text = scannedCode;
+                            //   } else if (scanCount == 1) {
+                            //     _serialTextController.text = scannedCode;
+                            //   }
+                            //   scanCount++;
+                            // } else {
                               _textController.text = scannedCode;
-                            }
+                            // }
                           });
                         }
                       });

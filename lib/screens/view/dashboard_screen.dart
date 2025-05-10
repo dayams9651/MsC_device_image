@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:msc_device_image/common/widget/round_button.dart';
 import 'package:msc_device_image/routes/routes.dart';
-import 'package:msc_device_image/screens/sim_module/views/text_scanner_view.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../common/widget/const_shimmer_effects.dart';
 import '../../service/logInApi.dart';
